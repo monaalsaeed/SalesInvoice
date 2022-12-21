@@ -5,6 +5,8 @@
         <group>
             <file>file:/E:/FWD/Java/SalesInvoice_Project/src/salesView/InvoiceFrame.java</file>
             <file>file:/E:/FWD/Java/SalesInvoice_Project/src/salesController/Controller.java</file>
+            <file>file:/E:/FWD/Java/SalesInvoice_Project/src/salesModel/ItemsTableModel.java</file>
+            <file>file:/E:/FWD/Java/SalesInvoice_Project/src/salesView/ItemDialog.java</file>
         </group>
     </open-files>
 </project-private>

@@ -11,7 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import salesModel.Invoice;
@@ -226,6 +228,7 @@ public class Controller implements ActionListener, ListSelectionListener {
         ItemsTableModel itmTM = new ItemsTableModel(inv.getItems());
         invF.getItemTable().setModel(itmTM);
         itmTM.fireTableDataChanged();
+        invF.getInvTM().fireTableDataChanged();
         }
     }
 
@@ -257,31 +260,82 @@ public class Controller implements ActionListener, ListSelectionListener {
         invDial = null;
     }
     
-    private void addItemOk() {
-        
-       String item = itmDial.getItemNameField().getText();
-        String countStr = itmDial.getItemCountField().getText();
-        String priceStr = itmDial.getItemPriceField().getText();
-        int count = Integer.parseInt(countStr);
-        double price = Double.parseDouble(priceStr);
-        int selectedInvoice = invF.getInvoiceTable().getSelectedRow();
-        if (selectedInvoice != -1) {
-            Invoice invoice = invF.getInvoices().get(selectedInvoice);
-            Item itm = new Item(item, price, count, invoice);
-            invoice.getItems().add(itm);
-            ItemsTableModel itmTM = (ItemsTableModel) invF.getItemTable().getModel();
-            itmTM.getItems().add(itm);
-            itmTM.fireTableDataChanged();
-            invF.getInvTM().fireTableDataChanged();
-        }
-        itmDial.setVisible(false); 
-        itmDial.dispose();
-        itmDial = null;
-    }
+//    private void addItemOk() {
+//
+//        String item = itmDial.getItemNameField().getText();
+//        String countStr = itmDial.getItemCountField().getText();
+//        String priceStr = itmDial.getItemPriceField().getText();
+//        int count = Integer.parseInt(countStr);
+//        double price = Double.parseDouble(priceStr);
+//        int selectedInvoice = invF.getInvoiceTable().getSelectedRow();
+//        if (selectedInvoice != -1) {
+//            Invoice invoice = invF.getInvoices().get(selectedInvoice);
+//            Item itm = new Item(item, price, count, invoice);
+//            invoice.getItems().add(itm); 
+//            ItemsTableModel itmTM = (ItemsTableModel) invF.getItemTable().getModel();
+//            itmTM.fireTableDataChanged();
+//            invF.getInvTM().fireTableDataChanged();
+//        }
+//        
+//        itmDial.setVisible(false); 
+//        itmDial.dispose();
+//        itmDial = null;
+//      }
 
     private void addItemCancle() {
+
         itmDial.setVisible(false);
         itmDial.dispose();
         itmDial = null;
     }
+    
+    public void addItemOk()
+    {
+        try{
+        String item_name = itmDial.getItemNameField().getText();
+        String item_count = itmDial.getItemCountField().getText();
+        int count = Integer.parseInt(item_count);
+        String item_price = itmDial.getItemPriceField().getText();
+        double price = Double.parseDouble(item_price);
+         int selectBill= invF.getInvoiceTable().getSelectedRow();
+
+        
+              if (selectBill != -1 ||item_name.isEmpty() || item_count.isEmpty() ||count == 0 ||item_price.isEmpty() || price ==0){
+                   
+             JOptionPane.showMessageDialog(invF, "you miss write details of item ", "Error", JOptionPane.ERROR_MESSAGE); 
+
+              }
+              
+        
+      
+        // if(selectBill != -1 ||item_name.isEmpty() || item_count.isEmpty() ||count == 0 ||item_price.isEmpty() || price ==0){
+        else{
+             System.out.println("should select invoice before creating new item");
+            // create object for selected bill
+            Invoice bill = invF.getInvoices().get(selectBill);
+            // create object of items details pass name - price - count - object selected bill
+            Item itemDetails = new Item(item_name, price, count, bill);
+            bill.getItems().add(itemDetails);
+            ItemsTableModel itemTableModel = (ItemsTableModel) invF.getItemTable().getModel();
+            //itemTableModel.getItems().add(itemDetails);
+            itemTableModel.fireTableDataChanged();
+            invF.getInvTM().fireTableDataChanged();
+                   
+         }
+       
+        }catch(Exception ex){
+            
+             ex.printStackTrace();
+              
+          // JOptionPane.showMessageDialog(frame, "you should select invoice", "Error", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(invF, "you miss write details of item ", "Error", JOptionPane.ERROR_MESSAGE); 
+            
+        }
+        
+        itmDial.setVisible(false);
+        itmDial.dispose();
+        itmDial = null;     
+        
+    }
+    
 }

@@ -36,13 +36,14 @@ public class InvoiceFrame extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         invoiceTable = new javax.swing.JTable();
+        invoiceTable.getSelectionModel().addListSelectionListener(Controller);
         createNewInvoiceBtn = new javax.swing.JButton();
         createNewInvoiceBtn.addActionListener(Controller);
         deleteInvoiceBtn = new javax.swing.JButton();
         deleteInvoiceBtn.addActionListener(Controller);
         jScrollPane4 = new javax.swing.JScrollPane();
         itemTable = new javax.swing.JTable();
-        invoiceTable.getSelectionModel().addListSelectionListener(Controller);
+
         addItemBtn = new javax.swing.JButton();
         deleteItemBtn = new javax.swing.JButton();
         javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
@@ -189,9 +190,9 @@ public class InvoiceFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel1)
                                     .addComponent(invoiceNoLable))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(invoiceDateLable))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(invoiceDateLable)
+                                    .addComponent(jLabel2))
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel3))
                             .addComponent(customerNameLable, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -302,7 +303,12 @@ private InvoiceTableModel invTM;
     }
 
     public InvoiceTableModel getInvTM() {
+        if(invTM ==null)
+        {
+            invTM = new InvoiceTableModel(getInvoices());
+        }
         return invTM;
+
     }
 
     public void setInvoices(ArrayList<Invoice> invoices) {

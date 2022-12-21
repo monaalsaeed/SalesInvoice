@@ -58,7 +58,5 @@ public class ItemDialog extends JDialog{
 
     public JTextField getItemPriceField() {
         return itemPriceField;
-    }
-    
-    
+    }   
 }
